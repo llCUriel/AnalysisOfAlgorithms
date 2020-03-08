@@ -1,0 +1,308 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\DeclareTextFontCommand{\emph}{\em}
+
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 2}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 3, 12/09/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 3: Divide y vencerás}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen: } Se implementa el algoritmo mergesort el cual utiliza la técnica "divide y vencerás que es el de descomponer en pequeños problemas y resolverlos individualmente".
+\\ 
+\\
+\textbf{Palabras Clave: } Algoritmo, Complejidad, MergeSort, Divide, Vencerás.
+
+\section{Introducción}
+\label{sec:introduction}
+
+En la cultura popular, divide y vencerás hace referencia a un refrán que implica resolver un problema difícil, dividiéndolo en partes más simples tantas veces como sea necesario, hasta que la resolución de las partes se torna obvia. La solución del problema principal se construye con las soluciones encontradas.
+
+En las ciencias de la computación, el término divide y vencerás (DYV) hace referencia a uno de los más importantes paradigmas de diseño algorítmico. El método está basado en la resolución recursiva de un problema dividiéndolo en dos o más subproblemas de igual tipo o similar. El proceso continúa hasta que éstos llegan a ser lo suficientemente sencillos como para que se resuelvan directamente. Al final, las soluciones a cada uno de los subproblemas se combinan para dar una solución al problema original.
+
+Esta técnica es la base de los algoritmos eficientes para casi cualquier tipo de problema como, por ejemplo, algoritmos de ordenamiento (quicksort, mergesort, entre muchos otros), multiplicar números grandes (Karatsuba), análisis sintácticos (análisis sintáctico top-down) y la transformada discreta de Fourier.
+
+Por otra parte, analizar y diseñar algoritmos de DyV son tareas que lleva tiempo dominar. Al igual que en la inducción, a veces es necesario sustituir el problema original por uno más complejo para conseguir realizar la recursión, y no hay un método sistemático de generalización.
+
+El nombre divide y vencerás también se aplica a veces a algoritmos que reducen cada problema a un único subproblema, como la búsqueda binaria para encontrar un elemento en una lista ordenada (o su equivalente en computación numérica, el algoritmo de bisección para búsqueda de raíces). Estos algoritmos pueden ser implementados más eficientemente que los algoritmos generales de “divide y vencerás”; en particular, si es usando una serie de recursiones que lo convierten en simples bucles. Bajo esta amplia definición, sin embargo, cada algoritmo que usa recursión o bucles puede ser tomado como un algoritmo de “divide y vencerás”. El nombre decrementa y vencerás ha sido propuesta para la subclase simple de problemas.
+
+La corrección de un algoritmo de “divide y vencerás”, está habitualmente probada una inducción matemática, y su coste computacional se determina resolviendo relaciones de recurrencia.\cite{al1} 
+
+
+\section{Conceptos Básicos}
+
+\subsection{Cota ajustada asintótica}
+En análisis de algoritmos una cota ajustada asintótica es una función que sirve de cota tanto superior como inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\theta(g(x))$ para referirse a las funciones acotadas por la función $g(x)$.\cite{cota}
+\subsection{Cota inferior asintótica}
+En análisis de algoritmos una cota inferior asintótica es una función que sirve de cota inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\Omega(g(x))$ para referirse a las funciones acotadas inferiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Cota superior asintótica}
+En análisis de algoritmos una cota superior asintótica es una función que sirve de cota superior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación de Landau: $O(g(x))$, Orden de $g(x)$, coloquialmente llamada Notación $O$ Grande, para referirse a las funciones acotadas superiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Algoritmos} 
+\subsubsection{MergeSort}
+Fue desarrollado en 1945 por John Von Neumann.
+
+Conceptualmente, el ordenamiento por mezcla funciona de la siguiente manera:
+
+Si la longitud de la lista es 0 ó 1, entonces ya está ordenada. En otro caso:
+Dividir la lista desordenada en dos sublistas de aproximadamente la mitad del tamaño.
+Ordenar cada sublista recursivamente aplicando el ordenamiento por mezcla.
+Mezclar las dos sublistas en una sola lista ordenada.
+El ordenamiento por mezcla incorpora dos ideas principales para mejorar su tiempo de ejecución:
+
+Una lista pequeña necesitará menos pasos para ordenarse que una lista grande.
+Se necesitan menos pasos para construir una lista ordenada a partir de dos listas también ordenadas, que a partir de dos listas desordenadas. Por ejemplo, sólo será necesario entrelazar cada lista una vez que están ordenadas.
+A continuación se describe el algoritmo en pseudocódigo (se advierte de que no se incluyen casos especiales para vectores vacíos, etc.; una implementación en un lenguaje de programación real debería tener en cuenta estos detalles):
+\\
+\addfigure{.7}{img_tres/merge}{fig:M}{Algoritmo de MergeSort}
+\section{Experimentación y Resultados}
+\subsection{MergeSort}
+(i). Mediante gráficas, muestre que el algoritmo Merge tiene complejidad lineal:
+Se tiene el algoritmo implementado del Merge: 
+\vspace{5 mm}
+
+\addfigure{.7}{img_tres/mergesort}{fig:MC}{Código de algoritmo Merge}
+Como salida del código tenemos a la n del tamaño de la entrada y la t la cual es el contador del algoritmo.
+
+\addfigure{.25}{img_tres/SalidaMerge}{fig:SM}{Salida del programa Merge}
+Si graficamos estos valores obtenemos la siguiente gráfica la cual nos demuestra que tiene complejidad lineal.
+\\
+
+\addfigure{0.9}{img_tres/GraficaMerge}{fig:SM}{Salida del programa Merge}
+
+
+(ii). Demuestre analíticamente que el algoritmo Merge tiene complejidad lineal.
+\\Encontrando las sumatorias del algoritmo de Merge: 
+\begin{lstlisting}
+      Algoritmo Merge(A,p,q,r)
+    	Input: Un arreglo A[p,1,2,...,r] con p <= q <=r
+        Output: 
+            n1 = q-p+1			//C1 = 1
+            n2 = r-q		
+            
+            Sean L[0,1,...,n1-1] y Q[0,1,...,n2-1] 2 arreglos
+            for i=0 hasta i < n1  	//C2 = n1 + 1
+            	L[i] = A[p+i]		//C3 = sum(0,n1-1,1)
+            for i=0 hasta i < n2	//C4 = n2 + 1 
+            	Q[i] = A[q+1+i]		//C5 = sum(0,n2-1,1)
+            i=0,j=0
+            
+            for k=p to k<= r		//C6 = r-p+1
+            	if(i<n1)		//C7 = sum(p,r,1)
+                    if(j<n2)		//C8 = sum(p,r,1)
+                    	if(L[i]<=Q[j])	//C9 = sum(p,r,1)
+                            A[k] = L[i]
+                            i++;
+                         else
+                            A[k] = Q[j]
+                            j++;
+                    else
+                    	A[k] = L[i]
+                        i++;
+                else
+                    A[k] = Q[j]
+                    j++;
+   	\end{lstlisting}
+Donde $sum(a,b,c)$ representa a la sumatoria desde $a$ hasta $b$ de $c$.\\
+Utilizamos los cn para calcular la complejidad del algoritmo de Merge.
+\\
+\includegraphics[height=.4\textwidth]{img_tres/2.png}
+(iii)Mediante gráficas, muestre que el algoritmo MergeSort tiene complejidad $\theta(nlogn)$.\\
+Se tiene el algoritmo implementado del MergeSort: 
+
+
+Como salida del código tenemos a la n del tamaño de la entrada y la t la cual es el contador del algoritmo.
+
+\addfigure{.25}{img_tres/SalidaMergeS}{fig:SM}{Salida del programa MergeSort}
+Si graficamos estos valores obtenemos la siguiente gráfica la cual nos demuestra que tiene complejidad $\theta(nlogn)$, puesto que aunque la gráfica de la salida del programa se encuentre por debajo de la de $nlogn$ se puede notar que si sigue la misma función. 
+\\
+\addfigure{.9}{img_tres/GraficaMergeS}{fig:SM}{Gráfica Merge}
+(iv)Demuestre analíticamente que el algoritmo MergerSort tiene complejidad $\theta(nlogn)$.
+\begin{lstlisting}
+      Algoritmo MergeSort(A,p,r)
+    	Input: Un arreglo A[p,1,2,...,r] con p <= r
+        Output: Un arreglo A[p,1,2,...,r] ordenado de manera creciente
+           if(p<r)
+           	q = (p+r)/2	// 1
+            MergeSort(A,p,q)	//  2T(n/2)
+            MergeSort(A,q+1,r)	//  2T(n/2)
+            Merge(A,p,q,r)	//  M(n) = complejidad del Merge
+   	\end{lstlisting}
+    Utilizamos los cn para calcular la complejidad del algoritmo de MergeSort.
+\\
+\begin{center}
+
+\includegraphics[height=1\textwidth]{img_tres/3.png}
+\end{center}
+
+\section{Conclusiones}
+\subsection*{Aguilar Garcia Mauricio}
+La estrategia de divide y venceras nos ayuda a pensar que los problemas los podemos resolver por partes las cuales son mas sencillas ya que es mejor pensar llegar a un lado y de  ahi resolverlo de "equis" manera que pensar desde el inicio como reolverlo ya que si pierdes un poco la logica en el caso que lo tengas completo se puede llegar a que inicias denuevo todo el problema pero en divide y venceras simplifica tanto la complejidad como la logica para programarlo. 
+
+\subsection*{Hernández Castellanos César Uriel}
+Divide y vencerás nos provee una estrategia de solución de problemas, ya que es posible dividir el problema de forma tal que nos ayuda a mejorar la solución a diferentes problemas.\\
+
+Divide y vencerás nos proporciona en ocasiones la mejora del nivel de complejidad de diferentes algoritmos.
+\subsection*{Conclusión general}
+    	En esta pr\'{a}ctica pudimos verificar que hay algoritmos que pueden o no tener la misma complejidad dependiendo de diversos factores, como puede ser el orden de un arreglo, el tamaño de un arreglo, si un número es muy grande, etc. Por ejemplo, el MergeSort es un algoritmo que invariablemente de como esté ordenado el arreglo al entrar, siempre va a tener la misma complejidad, en cambio en la Funcion 2, dependiendo en donde este el elemento máximo y el elemento mínimo el algoritmo puede ser n o $n^2$.
+\vspace{200 mm}
+
+\section{Anexo}
+    Calcular el orden de complejidad de los siguientes algoritmos en el mejor caso y en el peor de los casos (No es necesario hacer el análisis  linea por linea, en este caso, pueden aplicar propiedades de los algoritmos vistos en clase)\\
+\subsection{Función uno}
+\vspace{10 mm}
+
+\begin{algorithm}[H]
+    \caption{Función uno}
+      \label{euclides}
+      \begin{algorithmic}[1]
+		\Procedure{FuncionUno}{$n$ par}
+		\\
+            \State $i\gets 0$
+            \While {$i$<$n$}
+					\For{$i\gets 1,10$}
+					  \State Acción(i)
+    				  \State $j$++
+					\EndFor
+					\State $i=i+2$
+            \EndWhile
+          \EndProcedure
+		   \\
+      \end{algorithmic}
+  \end{algorithm}
+\vspace{10 mm}
+\subsection{Función dos}
+\vspace{10 mm}
+
+\begin{algorithm}[H]
+    \caption{Función uno}
+      \label{euclides}
+      \begin{algorithmic}[1]
+		\Procedure{FuncionDos}{$A[0,...,n-1]$, x entero}
+		\\
+					\For{$i\gets 0,n$}
+					  \If{$A[i]$<x}
+                      \State $A[i]\gets min(A[0,...,n-1])$
+                      \ElsIf{$bitOne$ || $bitTwo$}
+                      \State $A[i]\gets max(A[0,...,n-1])$
+                      \Else
+                      \State $exit$
+                      \EndIf
+					\EndFor
+          \EndProcedure
+		   \\
+      \end{algorithmic}
+  \end{algorithm}
+\vspace{10 mm}
+\subsection{Función uno implementada}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.999]{img_tres/funcionuno.png}
+\caption{Función uno implementada en el lenguaje de programación Python}
+
+\label{ejecucionEuclides}
+\end{figure}
+\subsection{Función dos implementada}
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.999]{img_tres/funciondos.png}
+\caption{Función dos implementada en el lenguaje de programación Python}
+\label{ejecucionEuclides}
+\end{figure}
+\subsection{Cálculo de la complejidad de la función uno}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{img_tres/FD_uuno.png}
+\caption{Uso de los teoremas para el cálculo de la complejidad del algoritmo}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{10 mm}
+El for interno es constante independientemente del valor de n, se ejecutará 10 veces siempre por lo que $\Theta(1)$. Y tambi\'{e}n se aprecia que el ciclo while se ejecutará n/2 veces, por lo que es $\Theta(n)$, por lo que es posible concluir que en el mejor caso y peor caso la complejidad del algoritmo será lineal.
+\subsection{Cálculo de la complejidad de la función dos}
+ Haciendo uso de los teoremas vistos en clase es posible observar que el mejor caso es cuando el número máximo y mínimo son el primer elemento, por lo que únicamente se ejecutará en una ocasión el ciclo.\\
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img_tres/FD_uno.png}
+\caption{Uso de los teoremas para el cálculo de la complejidad del algoritmo}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{10 mm}
+De manera similar calculamos el peor de los casos que se presenta cuando el número máximo y minimo son el último elemento por lo que tiene que recorrer todo el arreglo\\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1.0]{img_tres/FD_dos.png}
+\caption{Uso de los teoremas para el cálculo de la complejidad del algoritmo}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{5 mm}
+Esto nos quiere decir que la función dos tiene complejidad lineal y cuadrática en su mejor y peor caso respectivamente.
+\section{Bibliograf\'ia}
+\begin{thebibliography}{9}
+\bibitem{al1}
+ 'Algoritmo divide y vencerás' Disponible en \\
+ https://es.wikipedia.org/wiki/Algoritmo\_divide\_y\_vencerás// consultado 12 de Septiembre del 2017
+ \bibitem{cota}
+ Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+  
+\end{thebibliography}
+\end{document}

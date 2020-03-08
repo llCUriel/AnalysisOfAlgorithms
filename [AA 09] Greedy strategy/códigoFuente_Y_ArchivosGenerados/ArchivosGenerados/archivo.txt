@@ -1,0 +1,1 @@
+hola Mundo, este es un archivo de prueba para compresion por medio de Huffman.

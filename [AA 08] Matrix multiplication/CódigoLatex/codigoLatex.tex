@@ -1,0 +1,182 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 2}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 8, 14/11/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 8:  Multiplicación de una suma de matrices.}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen: } Se implementa el algoritmo de multiplicación de una secuencia de matrices el cual utiliza la técnica "programación dinámica" que es el de descomponer en subproblemas y resolverlos de la mejor manera, y al regresar evaluar todas las soluciones para encontrar la óptima".
+\\ 
+\\
+\textbf{Palabras Clave: } Algoritmo, Programacion dinámimca, Matriz, óptimo.
+
+\section{Introducción}
+\label{sec:introduction}
+
+La programación dinámica es una técnica matemática que se utiliza para la solución de problemas matemáticos seleccionados, en los cuales se toma un serie de decisiones en forma secuencial.\\\\
+ Proporciona un procedimiento sistemático para encontrar la combinación de decisiones que maximice la efectividad total, al descomponer el problema en etapas, las que pueden ser completadas por una o más formas (estados), y enlazando cada etapa a través de cálculos recursivos.\\\\
+  La programación dinámica no cuenta con una formulación matemática estándar, sino que se trata de un enfoque de tipo general para la solución de problemas, y las ecuaciones específicas que se usan se deben desarrollar para que representen cada situación individual. Comúnmente resuelve el problema por etapas, en donde cada etapa interviene exactamente una variable de optimización (u optimizadora).\\
+ La teoría unificadora fundamental de la programación dinámica es el Principio de Optimalidad, que nos indica básicamente como se puede resolver un problema adecuadamente descompuesto en etapas utilizando cálculos recursivos.\\\\
+ “Una política óptima tiene la propiedad de que, independientemente de las decisiones tomadas para llegar a un estado particular, en una etapa particular, las decisiones restantes deben constituir una política óptima para abandonar ese estado”. \cite{al1}\\
+
+\section{Conceptos Básicos}
+
+\subsection{Cota ajustada asintótica}
+En análisis de algoritmos una cota ajustada asintótica es una función que sirve de cota tanto superior como inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\theta(g(x))$ para referirse a las funciones acotadas por la función $g(x)$.\cite{cota}
+\subsection{Cota inferior asintótica}
+En análisis de algoritmos una cota inferior asintótica es una función que sirve de cota inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\Omega(g(x))$ para referirse a las funciones acotadas inferiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Cota superior asintótica}
+En análisis de algoritmos una cota superior asintótica es una función que sirve de cota superior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación de Landau: $O(g(x))$, Orden de $g(x)$, coloquialmente llamada Notación $O$ Grande, para referirse a las funciones acotadas superiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Algoritmos} 
+\subsubsection{Multiplicación de una secuencia de matrices}
+El producto de un número n de matrices es optimizable en cuanto al número de multiplicaciones escalares requeridas. A la hora de multiplicar una serie de matrices se puede elegir en que orden queremos realizar las multiplicaciones entre estas. Se pueden realizar en un orden cualquiera dada la propiedad asociativa de la multiplicación.\\
+El orden en que se decide multiplicar no afecta al resultado, es decir, el resultado siempre es el mismo. La diferencia esta en el número de multiplicaciones que implica elegir un orden u otro. Al multiplicar dos matrices $M_1$ de tamaño nxm y $M_2$ de tamaño mxk el número de multiplicaciones escalares es n*m*k. La cantidad total de multiplicaciones será, la suma de todas las multiplicaciones que hacen falta para multiplicar cada submatriz obtenida como resultado con la siguiente en el orden escogido.
+
+\addfigure{.7}{img_ocho/algo1}{fig:a1}{Algoritmo de secuencia de matrices}
+\addfigure{.7}{img_ocho/algo2}{fig:a2}{Algoritmo para imprimir la secuencia de matrices}
+\clearpage
+\section{Experimentación y Resultados}
+\subsection{Multiplcación de una secuencia de matrices}
+1.- Implementar el algoritmo de la multiplicación de una secuencia de matrices.\\
+\addfigure{.9}{img_ocho/codigo}{fig:cod}{Código de algoritmo}
+\clearpage
+(i). Como entrada el algoritmo tendrá n matrices $A_{i}$ de tamaño $p_{i-1} * p_{i}$: 
+\\
+\addfigure{.4}{img_ocho/entradaMa}{fig:eM}{Entrada con n tamaños para las n-1 matrices junto con sus tamaños respectivos del ejemplo 1}
+\addfigure{.4}{img_ocho/entradaMa2}{fig:em2}{Entrada con n tamaños para las n-1 matrices junto con sus tamaños respectivos del ejemplo 2}
+(ii). Como salida, se mostrará la configuración de paréntesis que genera el algoritmo.\\
+
+\addfigure{.6  }{img_ocho/salidaMa}{fig:SM}{Salida del programa con la configuración de los paréntesis del ejemplo 1}
+
+\addfigure{.6  }{img_ocho/salidaMa2}{fig:SM}{Salida del programa con la configuración de los paréntesis del ejemplo 2}
+
+(iii)Además se mostrarán todas las configuraciones de paréntesis y se corroborará que la generada en el punto ii) en efecto, es la óptima.
+\\
+Por fuerza bruta, para un caso de n=4 y p = \{30,15,6,10,50\}, se tienen las siguientes combinaciones:\\\\
+$(A_1A_2)(A_3A_4) \Rightarrow \#\quad  de \quad operaciones =  14,700$\\\\
+$A_1(A_2(A_3A_4))  \Rightarrow \# \quad de \quad operaciones =  30,000$\\\\
+$A_1((A_2A_3)A_4))  \Rightarrow \# \quad de \quad operaciones =  30,900$\\\\
+$((A_1A_2)A_3))A_4  \Rightarrow \# \quad de \quad operaciones =  19,500$\\\\
+$(A_1(A_2A_3))A_4  \Rightarrow \# \quad de \quad operaciones =  20,400$\\\\
+Como se puede ver, para este ejemplo la configuración óptima, ya que solo hace 14,700 operaciones, es: $(A_1A_2)(A_3A_4)$ que coincide con lo obtenido en el programa como se muestra en la Figura 6.\\\\
+%\includegraphics[height=.5\textwidth]{GraficaMergeS.png}
+%\captionof{figure}{Gráfica de la salida del programa, se puede notar como las gráficas siguen la misma función.}
+Ahora para un caso de n=4 y p = \{30,25,40,100,10\}, se tienen las siguientes combinaciones,\\\\
+$(A_1A_2)(A_3A_4) \Rightarrow \# \quad de \quad operaciones =  82,000$\\\\
+$A_1(A_2(A_3A_4))  \Rightarrow \#\quad  de \quad operaciones =  57,500$\\\\
+$A_1((A_2A_3)A_4))  \Rightarrow \#\quad  de \quad operaciones =  126,000$\\\\
+$((A_1A_2)A_3))A_4  \Rightarrow \#\quad  de \quad operaciones =  180,000$\\\\
+$(A_1(A_2A_3))A_4  \Rightarrow \#\quad  de \quad operaciones =  205,000$\\\\
+Como se puede ver, para este ejemplo la configuración óptima, ya que solo hace 57,500 operaciones, es: $A_1(A_2(A_3A_4))$ que coincide con lo obtenido en el programa como se muestra en la Figura 7.\\
+%\includegraphics[height=.5\textwidth]{GraficaMergeS.png}
+%\captionof{figure}{Gráfica de la salida del programa, se puede notar como las gráficas siguen la misma función.}
+\section{Conclusiones}
+    	En esta pr\'{a}ctica pudimos verificar que hay problemas que requieren otro tipo de solución, esto para poder reducir su complejidad en gran medidam, como es el caso de este algoritmo el cual encuentra la parentización óptima en $O(n^2)$ que es mucho mejor que las otras implentaciones, aunque para que podamos lograr esto entramos en el campo de la programación dinámica, que es buscar la solución óptima de todo un conjunto de soluciones posibles, y este algoritmo nos ayuda bastante a entender las diferencias y entender lo que es la programación dinámica.
+\subsection{Conclusión Aguilar Garcia Mauricio }
+   En la práctica pudimos ver como le programación dinámica es de gran ayuda para resolver problemas matemáticos como la multiplicación de matrices, puesto que la secuencia que elijamos para realizar la operación depende inmensamente de el tiempo que se vaya a tardar el algoritmo en obtener la solución por lo cual es esencial obtener la secuencia más optima, es decir, la que contenga menor cantidad de operaciones, para poder asegurar que nuestra multiplicación sea optima también.
+\subsection{Conclusión Hernández Castellanos César Uriel}
+    La programación dinámica es una técnica muy útil para tomar una sucesión de decisiones interrelacionadas, lo que requiere una formulación de una relación recursiva apropiada para cada problema individual, pero nos proporciona el ahorros computacionales.
+    
+    En cuanto a la práctica no se tuvo ningún inconveniente al momento de resolver el problema de encontrar la parentización óptima para una secuencia de matrices de manera dinámica, donde se complicó fue al momento de intentar programarlo por fuerza bruta.
+\section{Anexo}
+\subsection{Funci\'{o}n 1}  
+Problema: Utilizando método por sustitución, muestre que la siguiente ecuación de recurrencia es $\Omega(2^n)$.\\
+$P(n) = \sum_{k = 1}^{n-1}P(k)P(n-k), si\quad n\geq 2, y P(n=1)=1.$\\
+Sustituyendo se tiene que:\\
+Para n = 2\\
+$P(2) = \sum_{k = 1}^{1}P(k)P(2-k) = P(1)P(1) = 1$\\
+$P(2) = 1 \geq c*2^2 = 4*c \quad \vee c \leq 1/4$\\\\
+
+De manera análoga calculamos para 3, 4, 5, 6 y 7.\\\\
+$P(3) = P(1)P(2) + P(2)P(1) = 1*1 + 1*1 = 2$\\
+$P(3) = 2 \geq c*2^3 = 8*c \quad \vee c \leq 1/4$\\\\
+
+$P(4) = P(1)P(3) + P(2)P(2) + P(3)P(1) = 1*2 + 1*1 + 1*1 = 5$\\
+$P(4) = 5 \geq c*2^4 = 16*c \quad \vee c \leq 1/4$\\\\
+
+$P(5) = P(1)P(4) + P(2)P(3) +P(3)P(2)+P(4)P(1)$\\
+$P(5) = 1*5 + 1*2 + 2*1 + 5*1 = 14$\\
+$P(5) = 14 \geq c*2^5 = 32*c \quad \vee c \leq 1/4$\\\\
+
+$P(6) = P(1)P(5) + P(2)P(4) +P(3)P(3)+P(4)P(2)+P(5)P(1)$\\     $P(6) = 1*14 + 2*5 + 2*2 + 5*2 + 14*1 = 52$\\
+$P(6) = 52 \geq c*2^6 \vee c \leq 1/4$\\\\
+
+$P(7) = P(1)P(6) + P(2)P(5) +P(3)P(4)+P(4)P(3)+P(5)P(2) + P(6)P(1)$\\
+$P(7) = 1*52 + 1*14 + 2*5 + 5*2 + 14*1 + 52*1= 152$\\
+$P(7) = 152 \geq c*2^7 \vee c \leq 1$\\\\
+Recordando que para que P(n) = $\Omega(2^n)$ significa que existe una c, tal que:\\
+$P(n) \geq c*2^n$\\
+Tomando las evaluaciones anteriores y tomando a c como un valor menor que 1/4, se tiene que:\\
+$P(n) \geq c*2^n \vee c \leq 1/4$\\
+Ya que se cumple esta condición, podemos decir que, en efecto, 
+P(n) = $\Omega(2^n)$.\\ 
+
+\begin{thebibliography}{9}
+\bibitem{al1}
+"PROGRAMACIÓN DINÁMICA", Ingenieria UNAM, 2017. [Online]. Disponible: http://www.ingenieria.unam.mx/sistemas/PDF/Avisos/Seminarios/SeminarioV/Sesion6\_IdaliaFlores\_20abr15.pdf.
+ \bibitem{cota}
+ Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+
+\end{thebibliography}
+\end{document}

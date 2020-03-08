@@ -1,0 +1,242 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 2}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 5, 03/09/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 5: Problema del máximo subarreglo.}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen: } En la practica calculamos analítica y experimentalmente la complejidad de los algoritmos de
+maximo subarreglo cruzado y del maximo subarreglo comparandolos con el algoritmo de fuerza bruta para resolver el mismo problema.
+
+
+\textbf{Palabras Clave:}Algoritmo, Complejidad, Máximo, Subarreglo.
+
+
+\section{Introducción}
+
+En la cultura popular, divide y vencerás hace referencia a un refrán que implica resolver un problema difícil, dividiéndolo en partes más simples tantas veces como sea necesario, hasta que la resolución de las partes se torna obvia. La solución del problema principal se construye con las soluciones encontradas.
+
+En las ciencias de la computación, el término divide y vencerás (DYV) hace referencia a uno de los más importantes paradigmas de diseño algorítmico. El método está basado en la resolución recursiva de un problema dividiéndolo en dos o más subproblemas de igual tipo o similar. El proceso continúa hasta que éstos llegan a ser lo suficientemente sencillos como para que se resuelvan directamente. Al final, las soluciones a cada uno de los subproblemas se combinan para dar una solución al problema original.
+
+Esta técnica es la base de los algoritmos eficientes para casi cualquier tipo de problema como, por ejemplo, algoritmos de ordenamiento (quicksort, mergesort, entre muchos otros), multiplicar números grandes (Karatsuba), análisis sintácticos (análisis sintáctico top-down) y la transformada discreta de Fourier.
+
+Por otra parte, analizar y diseñar algoritmos de DyV son tareas que lleva tiempo dominar. Al igual que en la inducción, a veces es necesario sustituir el problema original por uno más complejo para conseguir realizar la recursión, y no hay un método sistemático de generalización.
+
+El nombre divide y vencerás también se aplica a veces a algoritmos que reducen cada problema a un único subproblema, como la búsqueda binaria para encontrar un elemento en una lista ordenada (o su equivalente en computación numérica, el algoritmo de bisección para búsqueda de raíces). Estos algoritmos pueden ser implementados más eficientemente que los algoritmos generales de “divide y vencerás”; en particular, si es usando una serie de recursiones que lo convierten en simples bucles. Bajo esta amplia definición, sin embargo, cada algoritmo que usa recursión o bucles puede ser tomado como un algoritmo de “divide y vencerás”. El nombre decrementa y vencerás ha sido propuesta para la subclase simple de problemas.
+
+La corrección de un algoritmo de “divide y vencerás”, está habitualmente probada una inducción matemática, y su coste computacional se determina resolviendo relaciones de recurrencia.\cite{al1} 
+
+\section{Conceptos básicos}
+\subsection{Cota ajustada asintótica}
+En análisis de algoritmos una cota ajustada asintótica es una función que sirve de cota tanto superior como inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\theta(g(x))$ para referirse a las funciones acotadas por la función $g(x)$.\cite{cota}
+\subsection{Cota inferior asintótica}
+En análisis de algoritmos una cota inferior asintótica es una función que sirve de cota inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\Omega(g(x))$ para referirse a las funciones acotadas inferiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Cota superior asintótica}
+En análisis de algoritmos una cota superior asintótica es una función que sirve de cota superior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación de Landau: $O(g(x))$, Orden de $g(x)$, coloquialmente llamada Notación $O$ Grande, para referirse a las funciones acotadas superiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Máximo Subarreglo} 
+El problema del subvector de suma máxima consiste en encontrar un subvector de una determinada longitud m cuya suma sea máxima dentro de un vector de longitud n, con $m<=n$.
+
+Este problema se puede resolver aplicando la técnica del algoritmo divide y vencerás, formando problemas cada vez más pequeños hasta alcanzar un caso base y posteriormente combinando las soluciones obtenidas. En concreto, la forma de aplicar el método algorítmico citado consiste en obtener los segmentos de suma máxima correspondientes a las mitades izquierda y derecha del vector y a la parte central para, una vez calculados, elegir el máximo de los tres. El algoritmo tiene un coste lineal respecto al tiempo.
+
+\vspace{20 mm}
+\section{Experimentación y Resultados}
+i) Mediante gráficas, muestre que el algoritmo del máximo subarreglo cruzado tiene complejidad lineal.
+\newline
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img_cinco/msc.png}
+\caption{Algoritmo implementado que encuentra el máximo subarreglo}
+\end{figure}
+En la figura 2 se muestra la gráfica de la complejidad del algoritmo del máximo subarreglo(roja) y además se muestra la función que acota por arriba a dicha función (azul)
+
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img_cinco/grafica_dos.png}
+\caption{Gráfica de la complejidad del algoritmo de máximo subarreglo}
+\end{figure}
+\newline
+\newline
+Las funciones que se muestran en la figura 2 son f1(n) = 3n, f2(n) = 2n y f1(n) = 1.5n
+\newline
+\newline
+En la imagen que se muestra a continuación se muestran las coordenadas que nos arrojó el algoritmo (n vs k), donde n es el tamaño del arrelo y k es el número de pasos.
+\newline
+\newline
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img_cinco/tabla_uno.png}
+\caption{Gráfica de la complejidad del algoritmo de máximo subarreglo}
+\end{figure}
+\vspace{10 mm}
+II) Demuestre analíticamente que el algoritmo del máximo subarreglo cruzado tienecomplejidad lineal.
+\\Encontrando las sumatorias del algoritmo de máximo subarreglo cruzado:\\
+\includegraphics[height=.2\textwidth]{img_cinco/AnCru.png}
+
+\newline
+\newline
+III) Mediante gráficas, muestre que el algoritmo del máximo subarreglo tiene
+complejidad nlog(n).
+
+\newline
+\newline
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img_cinco/ms.png}
+\caption{Algoritmo implementado en Python que encuentra el máximo subarreglo}
+\end{figure}
+En la figura siguiente se muestra la gráfica de complejidad del algoritmo anteriormente descrito (roja), además de las funciones que la acotan por la parte superior e inferior (azul y verde)
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_cinco/grafica_tres.png}
+\caption{Algoritmo implementado que encuentra el máximo subarreglo}
+\end{figure}
+\vspace{100 mm}
+IV) Demuestre analíticamente que el algoritmo del máximo subarreglo tiene complejidad nlog(n).\\
+\vspace{10 mm}
+
+\includegraphics[height=1\textwidth]{img_cinco/AnMatr.png}
+\newline
+\newline
+V) Implementar un algoritmo que resuelva el problema del máximo
+subarreglo utilizando fuerza bruta. Calculé su orden de complejidad analítica
+y experimentalmente.
+\subsection*{Algoritmo del máximo subarreglo por fuerza bruta}
+En la Figura uno se muestran las coordenadas obtenidas experimentalmente del algoritmo de máximo subarreglo por fuerza bruta.
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{img_cinco/tablaFuerzaBruta.png}
+\caption{Tabla de los valores graficados}
+\end{figure}
+En la figura 2 se muestra la gráfica que se obtuvo a partir de los puntos de la figura anterior, es posible observar que el algoritmo para la obtención del máximo subarreglo por fuerza bruta tiene complejidad cuadrática.
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{img_cinco/graficaFuerzaBruta.png}
+\caption{Gráfica de la complejidad del algoritmo del máximo subarreglo por fuerza bruta}
+\end{figure}
+En la figura 3 que se muestra a continuación, es posible observar la función que acota por arriba a nuestra función cuadrática.
+\vspace{20 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{img_cinco/accotarArriba.png}
+\caption{Función que acota por arriba a la función cuadrática f(n) = 8n}
+\end{figure}
+\vspace{20 mm}
+En la figura 4 que se muestra a continuación, es posible observar la función que acota por abajo a nuestra función cuadrática.
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img_cinco/acotarAbajo.png}
+\caption{Función que acota por abajo a la función cuadrática f(n) = 3 log(n)}
+\end{figure}
+
+En la figura 5 se muestra la implementación del algoritmo del máximo subarreglo por fuerza bruta, se ha usado el lenguaje de programación Java, para esto se creó una clase con el nombre de MaximoSubArreglo, donde se declararon los atributos sumamax,suma,n,maxizq y maxder, todos estos de tipo entero, además de la implementación del algoritmo mismo.
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{img_cinco/codigoFuerzaBruta.png}
+\caption{Código de implementación en Java del algoritmo del máximo subarreglo por fuerza bruta}
+\end{figure}
+\vspace{10 mm}
+En la Figura 6 se puede observar el calculo de la complejidad por bloques del algoritmo.
+\vspace{10 mm}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.73]{img_cinco/calcularComplejidad.png}
+\caption{Calculo de la complejidad del algoritmo del máximo subarreglo por fuerza bruta}
+\end{figure}
+
+\section{Conclusiones}
+\vspace{10 mm}
+\subsection*{Conclusión general}
+	En esta pr\'{a}ctica pudimos verificar que hay algoritmos que en su versión recursiva además de proporcionarnos la información que queremos, nos puede dar información adicional gracias al backtracking, como en este caso que en las versiones iterativas se puede encontrar la máxima suma, en cambio, en la recursiva además se obtiene donde inicia y  termina el subarreglo y dependiendo de la aplicación en la que lo vayamos a utilizar, podemos seleccionar el mejor algoritmo. 
+\subsection*{Aguilar Garcia Mauricio}
+	En ésta práctica pudimos ver como se resuelve el problema del máximo subarreglo y como al emplear el paradigma divide y vencerás se puede mejorar enormemente la complejidad algorítmica con diferencia a su contra parte de la fuerza bruta. 
+    El algoritmo máximo subarreglo, implementa el paradigma Divide y Vencerás, y la salida
+depende de que valor de sumatoria sea maximo, ya sea la llamada recursiva para la primer mitad, la segunda o la llamada a maximo subarreglo cruzado. Aparte de que al analizar el
+caso donde todos los elementos son negativos (análisis en el Anexo), nos ayudo a comprender
+completamente como funciona el algoritmo.
+\subsection*{Hernández Castellanos César Uriel}
+El problema del subarreglo máximo consiste en encontrar un subarreglo de una cierta longitud m cuya suma sea máxima dentro de un arreglo de tamaño n, donde m<=n
+\newline
+\newline
+En la presente práctica se presentaron tres formas diferentes de resolver la problemática del máximo subarreglo, en primera instancia se implemento un algoritmo con complejidad lineal, el siguiente logaritmica y por último cuadrática, teniendo peor desempeño el algoritmo por fuerza bruta y su contrario siendo la forma recursiva.
+\section{Anexo}
+¿Qué retorna la función de máximo subarreglo cuando todos los valores del arreglo son valores enteros negativos?.
+La función MS(A, bajo, alto) retorna la posición del mayor elemento en el arreglo, es decir el más cercano a cero.
+\\
+Esto se puede corroborar con la siguiente figura, en la cual se aprecia la entrada, A, y la salida, indice inferior, indice superior y la suma, que en este caso la suma es igual a el mayor elemento del arreglo.\\
+\addfigure{.5}{img_cinco/salAnexo}{fig:MS_Anexo}{Salida del programa, dando como entrada únicamente números negativos.}
+\\
+\section{Bibliograf\'ia}
+ \bibitem{cota}
+ Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+  
+\end{document}

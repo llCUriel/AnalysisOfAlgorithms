@@ -1,0 +1,260 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 2}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 7, 17/10/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 7:  -}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen: } 
+\textbf{Palabras Clave: Complejidad, Algoritmo, Ordenamiento, BucketSort, BogoSort y CocktailSort }
+\section{Introducción}
+
+En computación y matemáticas un algoritmo de ordenamiento es un algoritmo que pone elementos de una lista o un vector en una secuencia dada por una relación de orden, es decir, el resultado de salida ha de ser una permutación —o reordenamiento— de la entrada que satisfaga la relación de orden dada. Las relaciones de orden más usadas son el orden numérico y el orden lexicográfico. Ordenamientos eficientes son importantes para optimizar el uso de otros algoritmos (como los de búsqueda y fusión) que requieren listas ordenadas para una ejecución rápida. También es útil para poner datos en forma canónica y para generar resultados legibles por humanos.[4]
+
+Desde los comienzos de la computación, el problema del ordenamiento ha atraído gran cantidad de investigación, tal vez debido a la complejidad de resolverlo eficientemente a pesar de su planteamiento simple y familiar. Por ejemplo, BubbleSort fue analizado desde 1956. Aunque muchos puedan considerarlo un problema resuelto, nuevos y útiles algoritmos de ordenamiento se siguen inventado hasta el día de hoy (por ejemplo, el ordenamiento de biblioteca se publicó por primera vez en el 2004). Los algoritmos de ordenamiento son comunes en las clases introductorias a la computación, donde la abundancia de algoritmos para el problema proporciona una gentil introducción a la variedad de conceptos núcleo de los algoritmos, como notación de O mayúscula, algoritmos divide y vencerás, estructuras de datos, análisis de los casos peor, mejor, y promedio, y límites inferiores. 
+
+
+\section{Conceptos básicos}
+\subsection*{Ordenamiento por casilleros}
+El ordenamiento por casilleros (bucket sort o bin sort, en inglés) es un algoritmo de ordenamiento que distribuye todos los elementos a ordenar entre un número finito de casilleros. Cada casillero sólo puede contener los elementos que cumplan unas determinadas condiciones.[1]
+\newline
+\newline
+Después cada uno de esos casilleros se ordena individualmente con otro algoritmo de ordenación (que podría ser distinto según el casillero), o se aplica recursivamente este algoritmo
+\newline
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{img_siete/casilleros.png}
+    \caption{Ejemplo de ordenamiento por casilleros}
+\end{figure}
+\vspace{10 mm}
+\subsection*{BogoSort}
+Stupid Sort, en inglés también conocido como BogoSort, es un algoritmo de búsqueda particularmente inefectivo basado en el paradigma de ensayo y error.
+\newline
+Consiste en posicionar los elementos de manera aleatoria hasta obtener el ordenamiento del arreglo en cuestión.[2]
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{img_siete/67.png}
+\caption{Diagrama de flujo de BogoSort}
+\end{figure}
+\subsection{CocktailSort}
+El ordenamiento de burbuja bidireccional (cocktail sort en inglés) es un algoritmo de ordenamiento que surge como una mejora del algoritmo ordenamiento de burbuja.[3]
+
+La manera de trabajar de este algoritmo es ir ordenando al mismo tiempo por los dos extremos del vector. De manera que tras la primera iteración, tanto el menor como el mayor elemento estarán en sus posiciones finales. De esta manera se reduce el número de comparaciones aunque la complejidad del algoritmo sigue siendo O($n^2$).
+
+Hacemos un recorrido ascendente (del primer elemento al último), cogemos el primer elemento y lo comparamos con el siguiente, si el siguiente es menor lo pasamos al puesto anterior, de esta forma al final de la lista nos queda el mayor. Una vez terminada la serie ascendente, hacemos un recorrido descendente (del último elemento al primero) pero esta vez nos quedamos con los menores a los que vamos adelantando posiciones en vez de retrasarlas como hicimos en la serie ascendente. Repetimos las series alternativamente pero reduciendo el ámbito en sus extremos pues ya tendremos allí los valores más bajos y más altos de la lista, hasta que no queden elementos en la serie.
+\section{Experimentación y Resultados}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.60]{img_siete/desarrollo.png}
+\end{figure}
+\subsection*{Funcionamiento de Bucket Sort}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.60]{img_siete/ejemploBucket.png}
+\caption{Ejemeplo de funcionamiento de BucketSort}
+\end{figure}
+Supongamos que se tiene el arreglo unidimensional 9,26,24,17,4,22, el algoritmo de ordenamiento por casilleros funciona de la siguiente manera:
+\newline
+Se determinan el tamaño del casillero de la siguiente manera:
+\[ tamanioDelCasillero=\frac{Superior-Inferior}{n} \]
+Donde n es el número de casilleros que se desean crear, superior el número más grande y pequeño que puede tomar el arreglo (Se podría tomar el máximo número entero y el minimo como superior e inferior).
+\newline
+Posterior a que se determinan el número de casilleros a se crea una estructura de tipo casillero.
+\newline
+Luego cada casillero almacenará a los datos con caracteristicas similares, como por ejemplo puede ser un rango de números u alguna otra caracteristicas si hablaramos de programación orientada a objetos.
+\newline
+Como penúltimo paso se ordenaran cada uno de los casilleros con algún otro algoritmo de ordenamiento o llamando recursivamente al algoritmo de ordenamiento por casileros.
+\newline
+Finalmente se integran todos los casilleros en el arreglo, obteniendo de esta manera nuestro arreglo ordenado.
+\newline
+En la figura 3 se muestra un ejemplo de BucketSort, donde se tienen tres casilleros en el que cada casillero contiene números que se encuentran en un cierto rango para cada casillero 9 y 4 para el primer casillero, 17 para el segundo y 26,24 y 22 para el último casillero, luego cada casillero se ordena para finalmente obtener el arreglo de interés ordenado.
+\caption{Ejemeplo de funcionamiento de BucketSort}
+\subsection*{Ejemplo del funcionamiento de BogoSort}
+\newline
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.80]{img_siete/bogosortarray.png}
+\caption{Arreglo desordenado}
+\end{figure}
+En la figura 4 se muestra un arreglo desordenado, el cual será ordenado por BogoSort que consiste básicamente en posicionar los elementos del arreglo de manera aleatoria hasta obtener el arreglo ordenado.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.80]{img_siete/arreglouno.png}
+\caption{BogoSort en la primera iteración}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.80]{img_siete/arreglouno.png}
+\caption{BogoSort en la segunda iteración}
+\end{figure}
+Como es posible observar el algoritmo de BogoSort es altamente ineficaz, ya que no existe certeza de cuando finalizará.
+\vspace{10mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img_siete/worstcasebogo.png}
+\caption{BogoSort en el peor de los casos $\theta$(n n!) (Función que se representa con el color rojo)}
+\end{figure}
+En la figura 7 es posible apreciar la complejidad de Bogosort en el peor de los casos que nos resultó ser $\theta$(n n!) y por último se indica la función que acota por arriba a la función f(n) = n n! la cual se propuso como f1(n) = (n+0.5) (n+0.5)! (función representada de color azul)
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_siete/tabla.png}
+\caption{Pares de coordenadas obtenidos de manera experimental}
+\end{figure}
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img_siete/worstcasebucketsort.png}
+\caption{Bucketsort en el peor de los casos es $\theta$($n^2$)}
+\end{figure}
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{img_siete/tablita.png}
+\caption{Bucketsort en el peor de los casos es $\theta$($n^2$)}
+\end{figure}
+En la figura 9 se muestra la complejidad del algoritmo de BucketSort en el peor de los casos que nos resultó ser $\theta$($n^2$), se acotó por arriba con la función f(n)=1.5$n^2$, por último en la figura 10 se muestra los pares de coordenadas obtenidos experimentalmente.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_siete/mejorcasobogo.png}
+\caption{BogoSort en el mejor de los casos $\theta$(n) (Función que se representa de color rojo)}
+\end{figure}
+En la figura 11 se muestra la complejidad del algoritmo de Bogosort en su mejor caso que nos resultó lineal,
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_siete/tablita_.png}
+\caption{Tabla con los pares de coordenadas obtenidos de manera experimental}
+\end{figure}
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{img_siete/bestcasebucketsort.png}
+\caption{Bucket en el mejor de los casos $\theta$(n+k) (Función que se representa de color verde)}
+\end{figure}
+
+\subsection{CocktailSort}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_siete/cocktail-sort.png}
+\caption{Ejemplo cocktailSort}
+\label{CocktailSortexample}
+\end{figure}
+
+En la figura \ref{CocktailSortexample} se puede apreciar el como va avanzando el cocktailsort siendo que empieza desde el indice uno y termina hasta el tamaño completo del arreglo y en el cual se va a reduciendo en uno cada vez que va a una direccion en especifico hacinedo el metodo del bubblesort en estos casos solo que no regresa al inicio si no que toma otras condiciones para ordenar.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{img_siete/Slidacock.png}
+\caption{Salida casos aleatorios del CocktailSort}
+\label{Salidacockrandom}
+\end{figure}
+
+En la figura \ref{Salidacockrandom} se puede tomar como promedio que tiende a una elevación cercana a cuadratica pero un poco menor
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{img_siete/Salidamejor.png}
+\caption{Salida mejor caso CocktailSort}
+\label{Salidacockmejor}
+\end{figure}
+
+En la figura \ref{Salidacockmejor} se puede notar que la salida de CokctailSort tiene a ser del tipo $theta$(2*n) en el cual su mejor caso es cuando esta completamente ordenado
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{img_siete/Salidapeor.png}
+\caption{Salida peor caso CocktailSort}
+\label{Salidacockpeor}
+\end{figure}
+En la figura \ref{Salidacockpeor} se puede apreciar que tiene fines cuadraticos la salida en el cual el peor caso es que esten ordenados inversamente ya sea de mayor a menor o viceversa.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img_siete/CocktailSort.png}
+\caption{Comparación salidas delCocktailSort}
+\label{Salidascocktail}
+\end{figure}
+
+En la figura \ref{Salidascocktail} se puede apreciar el como regularmente se acerca mas al peor caso ya que al tener numeros aleatorios en el arreglo es dificil que esten ordenados completamente.
+\vspace{50 mm}
+
+\section{Conclusiones}
+\subsection*{Conclusión general}
+Los métodos de ordenamiento de datos son muy útiles, ya que la forma de arreglar los registros de una tabla en algún orden secuencial de acuerdo a un criterio de ordenamiento, el cual puede ser numérico, alfabético o alfanumérico, ascendente o descendente. Nos facilita las búsquedas de cantidades de registros en un moderado tiempo, en modelo de eficiencia. Mediante sus técnicas podemos colocar listas detrás de otras y luego ordenarlas, como también podemos comparar pares de valores de llaves, e intercambiarlos si no se encuentran en sus posiciones correctas.
+\newline
+Existen múltiples algoritmos de ordenamiento con diferente complejidad, siendo el ganador hasta el momento QuickSort
+\subsection*{Aguilar Garcia Mauricio}
+Descubrimos que existen muchos algoritmos para ordenar arreglos, y se descubrio que algunos no cambian su complejidad en los casos o es muy parecida a su peor caso la mayoria de las veces, y en el ultimo algoritmo se uso como base uno ya existente para la creación de otro el caso del CocktailSort.
+
+\subsection*{Hernández Castellanos César Uriel}
+
+Existen múltiples algoritmos para ordenar un arreglo de datos, particularmente se revisaron tres algortimos (Bucket Sort, BogoSort y CocktailSort) de los cuales se obtuvo de manera experimental la complejidad de cada uno de ellos, siendo el de peor rendimiento el BogoSort.
+\section{Bibliograf\'ia}
+
+[1]GeeksforGeeks. (2018). Bucket Sort - GeeksforGeeks. [online] Available at: https://www.geeksforgeeks.org/bucket-sort-2/ [Accessed 18 Oct. 2018].
+
+[2].En.wikipedia.org. (2018). Bogosort. [online] Available at: https://en.wikipedia.org/wiki/Bogosort [Accessed 18 Oct. 2018].
+
+[3]GeeksforGeeks. (2018). Cocktail Sort - GeeksforGeeks. [online] Available at: https://www.geeksforgeeks.org/cocktail-sort/ [Accessed 18 Oct. 2018].
+
+[4]Es.wikipedia.org. (2018). Algoritmo de ordenamiento. [online] Available at: https://es.wikipedia.org/wiki/Algoritmo_de_ordenamiento [Accessed 18 Oct. 2018].
+\end{document}

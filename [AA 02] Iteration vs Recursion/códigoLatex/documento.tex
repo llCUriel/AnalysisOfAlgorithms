@@ -1,0 +1,360 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 2}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 1, 29/08/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 2:  Funciones Recursivas vs Iterativas.}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen:} La práctica consiste en ver las diferencias entre algoritmos implementados
+de manera recursiva o iterativa así como su complejidad.
+\\\\
+{\bf Palabras Clave:} Algoritmo, Complejidad, Recursiva, Iterativa, Fibonacci y Suma.
+\section{Introducción}
+Los algoritmos, como ya sabemos, son un conjunto de pasos ordenados, finitos,
+los cuales tienen una entrada y una salida, y su función es resolver un
+problema. La resolución de un problema se puede dar de diferentes maneras,
+por lo cual existen diferentes algoritmos que realizan una misma función y a su
+vez, existen diferentes maneras de implementar un algoritmo, como por ejemplo
+de manera iterativa o recursiva.\\
+\\Para el diseño recursivo es necesario establecer la función recursiva, correspondiente
+al algoritmo; porteriormente de diseña el caso directo, el cual contiene
+la condición de frontera o de paro, y el caso recursivo, en el cual se obtiene
+mediante la definición de la función recursiva. Para el diseño iterativo es necesario
+determinar el inicio de la iteración, la condición de continuación y las
+intrucciones que se realizan en cada iteración, aparte de las instrucciones (si son
+requeridas) al término de las iteraciones.[1][2]\\
+\\En este reporte podremos notar las diferencias entre estas maneras de implementar
+los algoritmos, lo cual puede influir en la complejidad de un algoritmo
+de manera extraordinaria y como consecuencia la cantidad de tiempo necesaria
+para que el algoritmo cumpla su función.\\
+\\La manera en que lo veremos es implementando el algoritmo de fibonacci
+para encontrar n números, de manera recursiva e iterativa, así como la suma de
+los primeros cubos de un número también de manera recursiva e iterativa.\\\\
+\vspace{50 mm}
+
+\section{Conceptos básicos}
+\subsection*{Definición de recursividad}
+Recurrencia, recursión o recursividad es la forma en la cual se especifica un
+proceso basado en su propia definición, siendo esta caracterÍstica discernible en
+términos de autorreferencialidad, autopoiesis, fractalidad, o, en otras palabras,
+construcción a partir de un mismo tipo. Con ánimo de una mayor precisión, y
+para evitar la aparente circularidad en esta definición, se formula el concepto
+de recursión de la siguiente manera:
+Un problema que pueda ser definido en función de su tamaño, sea este N,
+pueda ser dividido en instancias más pequeñas (N) del mismo problema y se
+conozca la solución explícita a las instancias más simples, lo que se conoce
+como casos base, se puede aplicar inducción sobre las llamadas más pequeñas y
+suponer que estas quedan resueltas.[3]
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{img_dos/sluggo_recursive.jpg}
+\caption{Recursividad}
+\end{figure}
+\subsection*{Iterativo}
+Cualidad o característica de un algoritmo, procedimiento o función de calcular
+un valor especificado repitiendo muchas veces un conjunto de instrucciones.
+Al igual que la recursividad se utiliza para implementar estructuras de repetición.
+\begin{figure}[H]
+\centering
+\vspace{10 mm}
+\includegraphics[scale=0.5]{img_dos/pentagono.png}
+\caption{Pentágono iterativo}
+\end{figure}
+\subsection*{Sucesión de Fibonacci}
+La sucesión de Fibonacci es una serie de números que se obtiene por adición
+de lo dos números anteriores, obteniéndose la serie: 1, 1, 2, 3, 5, 8, 13, 21, 34,
+55, 89, 144, etc.
+Esta serie se hizo famosa por describir las proporciones naturales de todas las
+cosas en el universo. Lo cierto es que hoy en día la aparición de esta serie ocurre
+de forma muy amplia y extensa en campos como las matemáticas, ciencias de
+la computación, biología o teoría de juegos
+\begin{figure}[H]
+\centering
+\vspace{10 mm}
+\includegraphics[scale=0.3]{img_dos/fibonacciSpiralALOE.jpg}
+\caption{Sucesión de Fibonacci en la naturaleza}
+\end{figure}
+\vspace{100 mm}
+
+\section{Experimentación y Resultados}
+
+\subsection*{Problema uno}
+Implementar la sucesión de Fibonacci mediante un algoritmo recursivo y mediante unalgoritmo iterativo.\\
+
+Se hizo uso del lenguaje de programación Java, para lo que se definició una clase llamada SucesionDeFibonacci, la cual contiene únicamente dos atributos (número A y número B) de tipo entero que nos auxiliaran en la implementación del algoritmo iterativo de la sucesión de Fibonacci.\\
+
+Se implementan tres métodos, imprimirFibonacciIterativo(), mostrarNFibonacci() e imprimirFibonacciRescursivo() a continuación se muestra su implementación.\\\\
+\vspace{5 mm}
+\begin{figure}[H]
+\centering
+\vspace{10 mm}
+\includegraphics[scale=0.8]{img_dos/codigoFibonacci.png}
+\caption{Implementación de la sucesión de Fibonacci}
+\end{figure}
+Mostrar los algoritmos con la notación vista en clase (pseudocódigo).\\
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo}
+      \label{euclides}
+      \begin{algorithmic}[1]
+      
+          \Procedure{imprimirfibonacciincremental}{$numeroDeTerminos$}
+          \\
+              \State $numA\gets 1$
+              \\
+              \State $numB\gets 1$
+              \\
+                    \State mostrarNumA()
+                    \\
+					\For{$i\gets 2, i<=numeroDeTerminos$}
+                    \\
+                    \State mostrarNumB()
+                    
+              \State $numB\gets numA + numB$
+              
+              \State $numA\gets numB - numA$       
+              \\
+          \EndFor    
+          \\
+          \EndProcedure
+      \end{algorithmic}
+  \end{algorithm}
+\vspace{1 mm}
+\begin{algorithm}[H]
+    \caption{Algoritmo recursivo}
+      \label{euclides}
+      \begin{algorithmic}[1]
+
+		\Procedure{imprimirfibonaccirecursivo}{$numeroDeTerminos$}
+		\\
+        			\For{$i\gets 0, i<numeroDeTerminos$}
+                    \\
+                    \State mostrarNFibonacci(i)                             \\
+          \EndFor    
+          \\
+          \EndProcedure
+		   \\
+\Procedure{mostrarnfibonacci}{$n$}
+\\
+                         \If{$n==0$ || $n==1$}
+                         \\
+                          \State return n
+                          \\
+						 \Else
+                         \\
+                         \State return mostrarNFibonacci(n-1)+ mostrarNFibonacci(n-2)
+                         \\
+                         \EndIf
+                         \\
+          \EndProcedure
+           \vspace{5 mm}
+
+      \end{algorithmic}
+  \end{algorithm}
+\vspace{10 mm}
+Demostrar formalmente que el algoritmo iterativo tiene orden lineal.
+\vspace{20 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.3]{img_dos/demFibonacci.png}
+\caption{Demostración de la complejidad del algoritmo de la sucesión de Fibonacci iterativo}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{70 mm}
+A partir de gráficas experimentalmente, proponer el orden de complejidad para
+el algoritmo recursivo e iterativo.
+\\\\Mostrar mediante gráficas que el algoritmo para calcular la sucesión de Fibonacci en forma iterativa tiene complejidad lineal\\\\ 
+\vspace{2 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img_dos/fibonnaciIncremental.png}
+\caption{Gráfica del algoritmo que genera la serie de Fibonacci de manera iterativa}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{3 mm}
+\vspace{10 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{img_dos/fibonaccirecursivo.png}
+\caption{Gráfica del algoritmo que genera la serie de Fibonacci de manera recursiva}
+\label{ejecucionEuclides}
+\end{figure}
+\vspace{3 mm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{img_dos/salida.png}
+\caption{Salida del algoritmo que genera la sucesión de Fibonacci como recursivo e iterativo}
+\label{ejecucionEuclides}
+\end{figure}
+\subsection*{Problema dos}
+Implementar el siguiente algoritmo:	
+	\begin{lstlisting}
+	Algoritmo SumaDeCubos(n)
+    	Input: Un entero positivo n
+        Output: La suma de los primeros n cubos
+            if n = i return 1
+            else return S(n-1) + n*n*n 
+	\end{lstlisting}
+     
+		\begin{quote}
+    		i) A partir de las gráficas, proponga una función $g(n)$ tal que $T(n) \in O(g(n))$ con $T(n)$ el tiempo computacional del algoitmo\\
+            ii) Implemente un algoritmo de manera iterativa y apartir de gráficas, proponga una función $g(n)$ tal que $T(n) \in O(g(n))$ con $T(n)$ el tiempo computacional del algoritmo en el caso iterativo \\
+            iii) Calcule el tiempo computacional del algoritmo recursivo e iterativo de manera formal. Compare resultados
+    	\end{quote}
+
+\addfigure{.8}{img_dos/Sumancubos}{fig:GraficaSuman}{Gráfica del Algoritmo de SumaDeCubos Recursivo}
+    
+    La gráfica nos muestra que el algoritmo tiene orden de complejidad lineal, es decir, $T(n) \in \Theta(n)$
+
+ Para el algoritmo iterativo utilizamos el siguiente código:
+	\begin{lstlisting}
+      Algoritmo SumaDeCubos(n)
+    	Input: Un entero positivo n
+        Output: La suma de los primeros n cubos
+	 	acumulador = 0;			\\C1 = 1
+           while n 			\\C2 = n
+              acumulador = acumulador + n*n*n 	\\C3 sum(2,n,1)
+              n = n - 1;
+           return acumulador
+	\end{lstlisting}
+    Donde $sum(a,b,c)$ representa a la sumatoria desde $a$ hasta $b$ de $c$
+    
+    El cual nos dió los siguientes valores:
+    \\ 
+    \addfigure{.8}{img_dos/SumanIterativo}{fig:grafIterativo}{Gráfica del Algoritmo de SumaDeCubos Iterativo}
+        
+    Con estos valores podemos decir que el Algoritmo de SumaDeCubos Iterativo tiene orden lineal,\\ es decir, $T(n) = 2n \in \Theta(n)$\\
+    Para calcular de manera formal la complejidad del Algoritmo de SumaDeCubos Iterativo utilizaremos las constantes $C_n$
+    
+    \addfigure{.8}{img_dos/Complejidad_SI}{fig:W}{Calculando la complejidad del Algoritmo de SumaDeCubos Iterativo}
+    Ahora tenemos que demostrar que lo anterior es cierto
+    
+    \addfigure{.7}{img_dos/Demostracion_SI}{fig:W}{Demostrando que la complejidad del Algoritmo de SumaDeCubos Iterativo es de orden lineal}
+    
+    Para calcular el tiempo computacional de manera formal para el Algoritmo de SumaDeCubos Recursivo, tenemos que apreciar que para n=0, el algoritmo no hace nada y cuando se manda a llamar ella misma junto a la suma del n-ésimo cubo, tiene un coste de 1.
+    \\
+    \addfigure{.7}{img_dos/Demostracion_SR}{fig:W}{Calculando de manera formal la complejidad del Algoritmo de SumaDeCubos Recursivo}
+    
+    Para concluir se conocio que cada los dos tipos de algortimos son lineales pero el recursivo tiende a tener un tiempo menor como se ve en la siguiente grafica el color azul y gris, representan el recursivo y la acotación de este respectivamente y la naranja y amarrillo marcan el iterativo y su acotación respectivamente.
+    
+     \addfigure{.7}{img_dos/Suman}{fig:sumanall}{Resultado de ambas funciones conjuntas y sus acotaciones}
+    
+\section{Conclusiones}
+\vspace{10 mm}
+\subsection*{Conclusión general}
+En esta pr\'{a}ctica pudimos verificar que hay algoritmos en los que en su versi\'{o}n iterativa y recursiva tienen diferente complejidad, mientras que hay algoritmos que en ambas versiones tienen la misma complejidad. Esto nos obliga en cierta manera a siempre realizar el an\'{a}lisis de los algoritmos para estar seguros que realmente escogimos la mejor versi\'{o}n, ya sea en su forma iterativa o recursiva.
+
+\subsection*{Aguilar Garcia Mauricio}
+ En esta práctica me pude dar cuenta de que las complejidades de los algoritmos pueden o no cambiar dependiendo si se realizan de manera iterativa o recursiva, como consecuencia de ésto es necesario realizar siempre el análisis para determinar qué método es el más adecuado para el algoritmo que se desea implementar.
+
+\subsection*{Hernández Castellanos César Uriel}
+Los algoritmos recursivos e iterativos pueden tener complejidad diferente, mientras que en otras ocasiones ambos tendrán el mismo orden de complejidad, para calcular el orden de complejidad de ls algoritmos iterativos es necesario calcularlo linea por linea o por bloques, en cambio los algoritmos recursivos se le calcula el orden de complejidad estableciendo una ecuación de recurrencia de la cual obtendremos su orden de complejidad.\\
+
+\vspace{200 mm}
+
+\section{Anexo}
+\subsection{Bubble Sort}
+	Dado el algoritmo de ordenamiento Bubble Sort, c\'{a}culamos su complejidad, de la siguiente manera.\\
+	Sea A.\emph{length} = n,\\
+	\hspace*{1cm}BubbleSort(\emph{A})\\
+	\begin{tabular}{l l}
+	\hspace*{1cm}for \emph{i} $ \leftarrow$ 1	 to \emph{i} $\leq$ \emph{A.length -- 1} do
+	&$c_{1}$\hspace*{0.5cm}$n+1$\\
+	\hspace*{1.5cm}for \emph{j} $ \leftarrow$ \emph{A.\emph{length}} downto \emph{j} $\geq$ \emph{i+1} do
+	&$c_{2}$\hspace*{0.5cm}$\displaystyle\sum_{i=0}^{n}t_i$\\
+	\hspace*{2cm}if A[\emph{j}] $\leq$ A[\emph{j-1}] then
+	&$c_{3}$\hspace*{0.5cm}$\displaystyle\sum_{i=0}^{n}(t_i-1)$\\
+	\hspace*{2.5cm}exchange A[\emph{j} \emph{with} A[\emph{k}]
+	&$c_{4}$\hspace*{0.5cm}$\displaystyle\sum_{i=0}^{n}(t_i-1)$\\
+	\end{tabular}
+	
+	Sea $t_i$ la cantidad de veces que se ejecuta el for interno.\\
+	El peor caso se presenta cuando A est\'{a} ordenado de manera decreciente.\\
+	Se tiene que\\
+	\begin{tabular}{l | l}
+	$i$& $t_i$\\
+	\hline
+	1 &n--1\\
+	2 &n--2\\
+	3 &n--3\\
+	4 &n--4\\
+	$i$ &n--$i$
+	\end{tabular}
+	$\Rightarrow t_i = n - i$\\
+	$T(n) = c_1n + c_2(n-1) + c_3\displaystyle\sum_{i=0}^{n-1}t_i + c_4\displaystyle\sum_{i=0}^{n-1}(t_i-1)+ c_5\displaystyle\sum_{i=0}^{n-1}(t_i-1)+ c_6(n-1)  $\\
+	sustituyendo $t_i$\\
+	$T(n) = c_1n + c_2(n-1) + c_3\displaystyle\sum_{i=0}^{n-1}(n - i) + c_4\displaystyle\sum_{i=0}^{n-1}(n - i-1)+ c_5\displaystyle\sum_{i=0}^{n-1}(n - i-1)+ c_6(n-1)  $
+	\\simplificando y renombrando las constantes, se tiene\\
+	$T(n) = an^2 = bn +c = O(n^2)$
+	\\Cuando el arreglo esta ordenado de manera decreciente, Bubble Sort $\in O(n^2)$.
+	\\En cambio cuando el arreglo esta ordenado de manera ascendente, Bubble Sort $\in \Omega(n)$.\\
+
+
+\section{Bibliograf\'ia}
+
+[1]Brassard, Gilles; Bratley, Paul (1997). Fundamentos de Algoritmia. Madrid: PRENTICE HALL.
+
+[2] Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+
+
+
+\end{document}

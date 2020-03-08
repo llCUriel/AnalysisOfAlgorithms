@@ -1,0 +1,158 @@
+\documentclass[12pt,twoside]{article}
+\usepackage[spanish]{babel} % espanol
+\usepackage[utf8]{inputenc} % acentos sin codigo
+\usepackage{enumerate} % enumerados
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{amsmath}
+\usepackage[active]{srcltx}
+\usepackage{amssymb}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{amscd}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{makeidx}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{graphicx}
+\usepackage{vmargin}
+\graphicspath{ {images/} }
+\renewcommand{\baselinestretch}{1}
+\setcounter{page}{1}
+\setlength{\textheight}{21.6cm}
+\setlength{\textwidth}{14cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+\setlength{\intextsep}{0pt}
+\thispagestyle{empty}
+\setpapersize{A4}
+\setmargins{2.5cm}       % margen izquierdo
+{1.5cm}                        % margen superior
+{16.5cm}                      % anchura del texto
+{23.42cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+\title{Practica 9}
+\date{}
+\begin{document}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 9, 03/12/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Pr\'actica 10: Verificación en Tiempo Polinomial.}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\newtheorem{Theorem}{\quad Theorem}[section]
+\newtheorem{Definition}[Theorem]{\quad Definition}
+\newtheorem{Corollary}[Theorem]{\quad Corollary}
+\newtheorem{Lemma}[Theorem]{\quad Lemma}
+\newtheorem{Example}[Theorem]{\quad Example}
+\bigskip
+\textbf{Resumen: Se verifica que dado un grafo, éste es un ciclo Hamiltoniano del grafo problema, esta verificación se realiza en tiempo polinomial.} 
+\\ 
+\\
+\textbf{Palabras Clave: Algoritmo, Complejidad, Tiempo, Polinomial, Ciclos, Hamiltoniano, Grafo y Problema}
+
+\section{Introducción}
+Un camino hamiltoniano, en el campo matemático de la teoría de grafos, es un camino de un grafo, una sucesión de aristas adyacentes, que visita todos los vértices del grafo una sola vez. Si además el último vértice visitado es adyacente al primero, el camino es un ciclo hamiltoniano.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{camino.png}
+\caption{Camino hamiltoniano}
+\end{figure}
+El problema de encontrar un ciclo (o camino) hamiltoniano en un grafo arbitrario se sabe que es NP-completo.
+
+Los caminos y ciclos hamiltonianos se llaman así en honor de William Rowan Hamilton, inventor de un juego que consistía en encontrar un ciclo hamiltoniano en las aristas de un grafo de un dodecaedro. Hamilton resolvió este problema usando cuaterniones, aunque su solución no era generalizable a todos los grafos.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{william.png}
+\caption{Camino hamiltoniano}
+\end{figure}
+En teoría de la complejidad computacional, la clase de complejidad NP-completo es el subconjunto de los problemas de decisión en NP tal que todo problema en NP se puede reducir en cada uno de los problemas de NP-completo. Se puede decir que los problemas de NP-completo son los problemas más difíciles de NP y muy probablemente no formen parte de la clase de complejidad P. La razón es que de tenerse una solución polinómica para un problema NP-completo, todos los problemas de NP tendrían también una solución en tiempo polinómico. Si se demostrase que un problema NP-completo, llamémoslo A, no se pudiese resolver en tiempo polinómico, el resto de los problemas NP-completos tampoco se podrían resolver en tiempo polinómico. Esto se debe a que si uno de los problemas NP-completos distintos de A, digamos X, se pudiese resolver en tiempo polinómico, entonces A se podría resolver en tiempo polinómico, por definición de NP-completo. Ahora, pueden existir problemas en NP y que no sean NP-completos para los cuales exista solución polinómica
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{np.png}
+\caption{Diagrama de Euler de las familias de problemas y sus complejidades}
+\end{figure}
+
+
+\label{sec:introduction}
+\section{Conceptos Básicos}
+
+\subsection{Cota ajustada asintótica}
+En análisis de algoritmos una cota ajustada asintótica es una función que sirve de cota tanto superior como inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\theta(g(x))$ para referirse a las funciones acotadas por la función $g(x)$.\cite{cota}
+\subsection{Cota inferior asintótica}
+En análisis de algoritmos una cota inferior asintótica es una función que sirve de cota inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\Omega(g(x))$ para referirse a las funciones acotadas inferiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Cota superior asintótica}
+En análisis de algoritmos una cota superior asintótica es una función que sirve de cota superior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación de Landau: $O(g(x))$, Orden de $g(x)$, coloquialmente llamada Notación $O$ Grande, para referirse a las funciones acotadas superiormente por la función $g(x)$.\cite{cota}
+
+\section{Experimentación y resultados}
+\subsection{Verificación de Ciclos Hamiltonianos}
+(i). Mediante gráficas, muestre la complejidad que el algoritmo VerficarCicloHamiltoniano tiene:\\
+Se tiene el algoritmo implementado del VerficarCicloHamiltoniano: \\
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1.0]{F.png}
+\caption{Función checarCicloHamiltoniano}
+\end{figure}
+\\
+La salida es la que se muestra en la siguiente figura, con n el tmaño de la entrada y t el contador.\\
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{saaaaaaaaal.png}
+\caption{Salida generada}
+\end{figure}
+\\
+Si procedemos a graficar los valores obtenidos en la salida, obtendremos como resultado lo siguiente:
+\\
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{grafica.png}
+\caption{Complejidad del algoritmo planteado}
+\end{figure}
+Procedemos a calcular la complejidad del algoritmo que verifica un ciclo hamiltoniano, por medio del método del bloques, por lo que finalmente se obtiene que el algoritmo de verificación de un ciclo hamiltoniano, tiene complejidad lineal.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.2]{analitico.png}
+\end{figure}
+\section{Conclusiones}
+\subsection{Conclusión de Hernández Castellanos César Uriel}
+En la presente práctica fue posible verificar soluciones de problemas en los que no existen algoritmos que lo resuelvan de manera eficiente, otra forma de llamar a los problemas np o np completos. El problema que se abordó en el presente documento es que dado un grafo, saber si tiene un c iclo hamiltoniano de otro grafo, y lo único que se espera como resultado de éste programa es un resultado binario.
+\subsection{Conclusión Mauricio Aguilar Garcia }
+    En la práctica se empleó una estrategia para comprobar si la solución dada a un problema NP completo es la correcta, y dada la definición de NP completos sabemos que la comprobación de la soluciones a estos problemas se realiza en tiempo polinomial, por lo que es bastante rápido de llevar a un algoritmo.
+\subsection{Conclusiones generales}
+Se verificó la solución de un problema que es np completo, para el cual no existe un algoritmo que sea capaz de resolverlo de manera eficiente, en lo particular se trató del problema del camino hamiltoniano, que es precisamente np completo
+\\
+\\
+\\
+\\
+\begin{thebibliography}{9}
+\bibitem{al1}
+ Gardner, M. "Mathematical Games: About the Remarkable Similarity between the Icosian Game and the Towers of Hanoi." Sci. Amer. 196, 150-156, May 1957
+ \bibitem{al2}
+ Garey, M. and D. Johnson, Computers and Intractability; A Guide to the Theory of NP-Completeness, 1979.
+ \bibitem{cota}
+ Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+  
+\end{thebibliography}

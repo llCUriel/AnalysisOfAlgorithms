@@ -1,0 +1,3 @@
+binaryCalculator.java únicamente nos realiza la suma de dos números binarios de n bits.
+
+binaryCalculatorExperimental nos muestra la tabla de datos a graficar.

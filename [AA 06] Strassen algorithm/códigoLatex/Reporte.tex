@@ -1,0 +1,158 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{wallpaper}
+\usepackage{mathtools}
+\usepackage{listings}
+\newcommand{\addfigure}[4]{
+        \begin{figure}[htbp!]
+            \begin{center}	
+                \fbox{\includegraphics[width=#1\textwidth]{#2}}
+                \caption{#4}
+                \label{#3}
+            \end{center}
+        \end{figure}
+  }
+\usepackage{multicol}		
+	\setlength{\columnsep}{0.5cm}
+\usepackage{capt-of}
+\usepackage{graphicx}
+\usepackage[]{algorithm2e}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{{Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\lhead{\thepage  }
+\lstset{
+	numbers=left,
+    escapeinside={\%*}{*)},
+    numbersep=5pt,
+    stepnumber=1
+}
+
+\title{PRÁCTICA 6: ALGORITMO DE STRASSEN  }
+
+\author{{Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\date{}
+\begin{document}
+\ThisURCornerWallPaper{1}{main2}
+\renewcommand{\refname}{Bibliografía}
+\centerline{\bf An\'alisis de Algoritmos, Sem: 2019-1, 3CV1, Pr\'actica 6, 10/10/2018}
+\centerline{}
+\centerline{}
+\begin{center}
+\Large{\textsc{Práctica 6: Algoritmo de Strassen}}
+\end{center}
+\centerline{}
+\centerline{\bf {Hern\'andez Castellanos C\'esar Uriel, Aguilar Garcia Mauricio}}
+\centerline{}
+\centerline{Escuela Superior de C\'omputo}
+\centerline{Instituto Polit\'ecnico Nacional, M\'exico}
+\centerline{$uuriel12009u@gmail.com, mauricio.aguilar.garcia.90@gmail.com$}
+\textbf{Resumen: } Se implementa el algoritmo Strassen el cual reduce la complejidad del algoritmo utilizado para la multiplicación de matrices de $O(n^3)$ a $O(n^{2.8})$.
+\\ 
+\\
+\textbf{Palabras Clave: } Algoritmo, Complejidad, Matriz, Strassen.
+
+\section{Introducción}
+\label{sec:introduction}
+
+Uno de los problemas computacionales que más se ha estudiado y optimizado son la multiplicación de matrices. La definición de la operación de matrices es muy sencilla de describir, lo cual simplifica su comprensión.\cite{uno}\\ 
+    
+    \noindent Los métodos mas comunes son el método iterativo de la multiplicación de matrices, que ocupa la definición posteriormente descrita (en la sección \ref{sec:concep}; y el método recursivo para matrices cuadradas de orden 2, que partiona un matriz en 4 submatrices de mismo tamaño. Ambos con orden de complejidad $\Theta(n^3)$.$^{[2]}$\\
+    
+    El algoritmo de Strassen, al igual que el algoritmo recursivo que resuelve el mismo problema de multiplicación de matrices cuadradas de orden 2, implementa el paradigma divide y vencerás. Pero a diferencia de este ocupa 7 multiplicaciones (llamadas recursivas) en lugar de 8. Para el algoritmo de Strassen se particiona cada matriz en 4 submatrices (11,12,21,22) del mismo tamaño y se expresa la matriz $C=A*B$ con base en sus submatrices.\\ \noindent A continuación se describe el algoritmo de Strassen:\cite{cota} \clearpage
+    \begin{multicols}{2}
+    \begin{quote}
+    Llamadas recursivas a Strassen\\\\
+    $s_1 = (a_{11} + a_{22} )( b_{11} + b_{22} )$\\
+    $s_2 = (a_{21} + a_{22} )( b_{11} )$\\
+    $s_3 = (a_{a11})( b_{12} - b_{22} )$\\
+    $s_4 = (a_{22})( b_{21} - b_{11} )$\\
+    $s_5 = (a_{11} + a_{12} )( b_{22} )$\\
+    $s_6 = (a_{21} - a_{11} )( b_{11} + b_{12} )$\\
+    $s_7 = (a_{12} - a_{22} )( b_{21} + b_{22} )$\\
+    
+    Elementos de la Matriz resultado C.\\\\
+    $c_{11} = s_1 + s_4 - s_5 + s_7$\\
+    $c_{12} = s_2 + s_4$\\
+    $c_{21} = s_3 + s_5$\\
+    $c_{22} = s_1 + s_3 - s_2 + s_6$\\\\\\
+    \end{quote}
+    \end{multicols} 
+
+
+\section{Conceptos Básicos}
+\label{sec:concep}
+\subsection{Cota ajustada asintótica}
+En análisis de algoritmos una cota ajustada asintótica es una función que sirve de cota tanto superior como inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\theta(g(x))$ para referirse a las funciones acotadas por la función $g(x)$.\cite{cota}
+\subsection{Cota inferior asintótica}
+En análisis de algoritmos una cota inferior asintótica es una función que sirve de cota inferior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación $\Omega(g(x))$ para referirse a las funciones acotadas inferiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Cota superior asintótica}
+En análisis de algoritmos una cota superior asintótica es una función que sirve de cota superior de otra función cuando el argumento tiende a infinito. Usualmente se utiliza la notación de Landau: $O(g(x))$, Orden de $g(x)$, coloquialmente llamada Notación $O$ Grande, para referirse a las funciones acotadas superiormente por la función $g(x)$.\cite{cota}
+
+\subsection{Algoritmos} 
+\subsubsection{Strassen}
+En la disciplina matemática del álgebra lineal, el algoritmo de Strassen, llamado así por Volker Strassen, es un algoritmo usado para la multiplicación de matrices. Es asintóticamente más rápido que el algoritmo de multiplicación de matrices estándar, pero más lento que el algoritmo más rápido conocido, y es útil en la práctica para matrices grandes.
+\\
+Volker Strassen publicó el algoritmo de Strassen en 1969. Pese a que su algoritmo es sólo ligeramente más rápido que el algoritmo estándar para la multiplicación de matrices, fue el primero en señalar que el enfoque estándar no es óptimo. Su artículo comenzó la búsqueda de algoritmos aún más rápidos, como el complejo algoritmo de Coppersmith–Winograd de Shmuel Winograd en 2010 (que utiliza 20 multiplicaciones binarias, pero utiliza 155 sumas binarias en lugar de las 18 del algoritmo de Strassen), publicado en 2000.\cite{matri}
+
+\section{Experimentación y Resultados}
+\subsection{Strassen}
+(i). Mediante gráficas muestre que el algoritmo de Strassen tiene complejidad $O(n^{2.8})$: \\
+	Las siguientes imagenes (figura 1,2,3 y 4) son el código implementando el algoritmo Strassen:\\
+\addfigure{.5}{img/Codigo}{fig:man}{Código de main}
+\addfigure{.7}{img/Codigo1}{fig:stra}{Primera parte del código del algoritmo strassen}
+\addfigure{.7}{img/Codigo2}{fig:stra1}{Segunda parte del código del algoritmo strassen}
+\addfigure{.7}{img/Codigo3}{fig:sumres}{Código de la suma y resta de matrices}
+\clearpage
+Como salida del código tenemos a la n del tamaño de la entrada y la t la cual es el contador del algoritmo en la figura 5.\\
+\addfigure{.25}{img/SalidaStre}{fig:SM}{Salida del programa Stressen}
+Si gráficamos los valores de la salida respecto a la función de complejidad propuesta que es $O(n^{2.81})$ entonces obtenemos la gráfica de la figura 6.\\
+\addfigure{.7}{img/graficaPrac5}{fig:grafica}{Gráfica de la salida del programa strassen junto con la función $O(n^{2.81})$}
+
+(ii). Para valores muy grandes de matrices compare el algoritmo de Strassen con el producto usual de matrices (comparar la complejidad).
+\\
+Usando como entradas grandes los las primeras 10 potencias de 2, se tiene que las salidas del programa son las que aparecen en la Figura 1. 
+\\
+\begin{center}
+\includegraphics[height=.7\textwidth]{img/n3IterSal.png}\end{center}
+
+\captionof{figure}{Salida del programa en su versión iterativa, que es $\Theta(n^{3})$.}
+De manera análoga, usando como entradas grandes las primeras 10 potencias de 2, se tiene que las salidas del programa usando el Algoritmo de Strassen son las que aparecen en la Figura 2.\\
+\begin{center}
+
+\includegraphics[height=.6\textwidth]{img/nSal.png}
+\end{center}
+\captionof{figure}{Salida del programa Strassen $\Theta(n^{2.8})$.}
+Con los datos que nos arrojaron ambos algoritmos se llega a la siguiente gráfica, que no permite ver como difiere el tiempo entre ambos algoritmos, como se puede ver en la Figura 3.\\
+\begin{center}
+\includegraphics[height=.4\textwidth]{img/comparativa.png}
+\end{center}
+\captionof{figure}{Gráfica comparativa de la versión iterativa y la de Strasse.}
+
+\section{Conclusiones}
+    	En esta pr\'{a}ctica pudimos verificar que hay algoritmos en los que su complejidad puede variar por muy poco, pero cuando se trata de entradas muy grandes esa pequeña diferencia se convierten en bastante tiempo, y también nos muestra la importancia de buscar siempre el algoritmo más óptimo, para que en casos como éste, en el que la complejidad solo cambia por muy poco, para que en entradas grandes se mantenga el tiempo a lo mínimo posible.
+\subsection{Mauricio Aguilar Garcia }
+    En ésta práctica pudimos implementar el algoritmo strassen el cual demostró que la manera en que se estaba realizando la multiplicación de matrices no era la optima y dió cabida a que se buscaran maneras más rápidas de realizarlas, el algoritmo toma ayuda de la manera de resolver problemas el cual es divide y vencerás aplicandolo de manera recursiva y aunque el algoritmo se note mucho más complejo de implementar si se llega a notar una diferencia de operaciones realizadas respecto a su contra parte.
+    \subsection{Hern\'andez Castellanos C\'esar Uriel}
+    
+    El algoritmo de Strassen mejora el algoritmo tradicional del producto de dos matrices, realiza las sub-soluciones de una manera exacamente igual, pero con la peculiaridad de hacer un producto menos, resultando que nuestra complejidad será mejorada.
+    
+    Se podria decir que el algoritmo de Strassen con respecto a los algoritmos tradicionales de producto de matrices no significan un cambio importante en el caso de matrices de un tamaño pequeño, pero al momento de ingresar matrices de una mayor dimensión el algoritmo de Strassen empieza a tener un efecto bastante significativo.
+	
+
+\begin{thebibliography}{9}
+\bibitem{uno}
+ 'Algoritmo divide y vencerás' Disponible en 
+ https://es.wikipedia.org/wiki/Algoritmo\_divide\_y\_vencerás consultado 12 de Septiembre del 2017
+  \bibitem{cota}
+ Introduction to Algorithms, Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein
+ \bibitem{matri}
+ Strassen, Volker, La eliminación gaussiana no es óptima, Numer. Math. 13, p. 354-356, 1969
+\end{thebibliography}
+\end{document}
